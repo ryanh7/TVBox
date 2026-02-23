@@ -726,6 +726,11 @@ public class ApiConfig {
                 }
                 liveChannelItem.setChannelSourceNames(sourceNames);
                 liveChannelItem.setChannelUrls(sourceUrls);
+                String logoUrl = DefaultConfig.safeJsonString(obj, "logo", null);
+                if (logoUrl != null && !logoUrl.isBlank()) {
+                    liveChannelItem.setLogoUrl(logoUrl);
+                }
+
                 liveChannelGroup.getLiveChannels().add(liveChannelItem);
             }
             liveChannelGroupList.add(liveChannelGroup);

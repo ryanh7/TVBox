@@ -774,8 +774,14 @@ public class LivePlayActivity extends BaseActivity {
             showChannelInfo();
             String savedEpgKey = channel_Name.getChannelName() + "_" + epgDateAdapter.getItem(epgDateAdapter.getSelectedIndex()).getDatePresented();
             if (hsEpg.containsKey(savedEpgKey)) {
-                String[] epgInfo = EpgUtil.getEpgInfo(channel_Name.getChannelName());
-                getTvLogo(channel_Name.getChannelName(), epgInfo == null ? null : epgInfo[0]);
+                String logoUrl = channel_Name.getLogoUrl();
+                if (logoUrl == null || logoUrl.isBlank()) {
+                    String[] epgInfo = EpgUtil.getEpgInfo(channel_Name.getChannelName());
+                    if (epgInfo != null) {
+                        logoUrl = epgInfo[0];
+                    }
+                }
+                getTvLogo(channel_Name.getChannelName(), logoUrl);
                 ArrayList arrayList = (ArrayList) hsEpg.get(savedEpgKey);
                 if (arrayList != null && arrayList.size() > 0) {
                     Date date = new Date();
@@ -832,7 +838,11 @@ public class LivePlayActivity extends BaseActivity {
         timeFormat.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
         String[] epgInfo = EpgUtil.getEpgInfo(channelName);
         String epgTagName = channelName;
-        getTvLogo(channelName, epgInfo == null ? null : epgInfo[0]);
+        String logoUrl = channel_Name.getLogoUrl();
+        if ((logoUrl == null || logoUrl.isBlank()) && epgInfo != null) {
+            logoUrl = epgInfo[0];
+        }
+        getTvLogo(channelName, logoUrl);
         if (epgInfo != null && !epgInfo[1].isEmpty()) {
             epgTagName = epgInfo[1];
         }
@@ -1762,10 +1772,7 @@ public class LivePlayActivity extends BaseActivity {
 
             @Override
             public void onSuccess(Response<String> response) {
-                JsonArray livesArray;
-                LinkedHashMap<String, LinkedHashMap<String, ArrayList<String>>> linkedHashMap = new LinkedHashMap<>();
-                TxtSubscribe.parse(linkedHashMap, response.body());
-                livesArray = TxtSubscribe.live2JsonArray(linkedHashMap);
+                JsonArray livesArray = TxtSubscribe.parse(response.body());
 
                 ApiConfig.get().loadLives(livesArray);
                 List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();

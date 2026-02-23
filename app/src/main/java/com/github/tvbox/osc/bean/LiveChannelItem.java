@@ -21,6 +21,7 @@ public class LiveChannelItem {
     private String channelName;
     private ArrayList<String> channelSourceNames;
     private ArrayList<String> channelUrls;
+    private String logoUrl;
     public int sourceIndex = 0;
     public int sourceNum = 0;
     public boolean include_back = false;
@@ -66,6 +67,15 @@ public class LiveChannelItem {
         this.channelUrls = channelUrls;
         sourceNum = channelUrls.size();
     }
+    
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
     public void preSource() {
         sourceIndex--;
         if (sourceIndex < 0) sourceIndex = sourceNum - 1;
