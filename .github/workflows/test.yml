@@ -111,7 +111,6 @@ jobs:
             # 移动并重命名文件
             mv "$file" "apk/$new_base"
           done
-          mv sourceCode-${{ env.commitS }}.* apk/
 
       - name: Upload App To Artifact
         uses: actions/upload-artifact@v6
